@@ -58,8 +58,16 @@ int main(int argc, char **argv) {
         DrawFPS(10, 10);
         
         sprintf(num_text, "%llu", num);
+        DrawText("i64:", GetScreenWidth() / 40, GetScreenHeight() / 5, GetScreenWidth() / 40, LIGHTGRAY);
+        DrawText(num_text, GetScreenWidth() / 40, GetScreenHeight() / 4, GetScreenWidth() / 40, WHITE);
 
-        DrawText(num_text, GetScreenWidth() / 40, GetScreenHeight() / 28, GetScreenWidth() / 40, WHITE);
+        sprintf(num_text, "%ld", num);
+        DrawText("u64:", GetScreenWidth() / 2, GetScreenHeight() / 5, GetScreenWidth() / 40, LIGHTGRAY);
+        DrawText(num_text, GetScreenWidth() / 2, GetScreenHeight() / 4, GetScreenWidth() / 40, WHITE);
+
+        sprintf(num_text, "0x%16llX", num);
+        DrawText("hex:", GetScreenWidth() / 40, GetScreenHeight() / 3, GetScreenWidth() / 40, LIGHTGRAY);
+        DrawText(num_text, GetScreenWidth() / 40, GetScreenHeight() / 2.5, GetScreenWidth() / 40, WHITE);
 
         for (int i = 0; i < 64; i++) {
             Button b = buttons.data[i];
