@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 
     for (int i = 0; i < 64; i++) {
         buttons.data[i] = (Button){
-            { 16 + i * (GetScreenWidth() / 64), 200, GetScreenWidth() / 100, GetScreenHeight() / 38 },
+            { 16 + i * (GetScreenWidth() / 64), GetScreenHeight() / 10, GetScreenWidth() / 100, GetScreenHeight() / 38 },
             "0",
             RED,
             i
@@ -43,15 +43,23 @@ int main(int argc, char **argv) {
 
     char num_text[24];
 
-    while (!WindowShouldClose())
-    {
+    while (!WindowShouldClose()) {
+        for (int i = 0; i < 64; i++) {
+            buttons.data[i].rec = (Rectangle){
+                16 + i * (GetScreenWidth() / 64),
+                GetScreenHeight() / 10,
+                GetScreenWidth() / 100,
+                GetScreenHeight() / 38
+            };
+        }
+
         BeginDrawing();
         ClearBackground(DARKGRAY);
         DrawFPS(10, 10);
         
         sprintf(num_text, "%llu", num);
 
-        DrawText(num_text, 100, 100, 72, WHITE);
+        DrawText(num_text, GetScreenWidth() / 40, GetScreenHeight() / 28, GetScreenWidth() / 40, WHITE);
 
         for (int i = 0; i < 64; i++) {
             Button b = buttons.data[i];
@@ -64,9 +72,11 @@ int main(int argc, char **argv) {
                 if (raylib_color_equals(b.color, RED)) {
                     num |= mask;
                     buttons.data[i].color = GREEN;
+                    buttons.data[i].text = "1";
                 } else {
                     num &= ~mask;
                     buttons.data[i].color = RED;
+                    buttons.data[i].text = "0";
                 }
             }
         }
