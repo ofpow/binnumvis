@@ -66,6 +66,12 @@ int main(int argc, char **argv) {
             DrawRectangleRounded(b.rec, 0.5, 3, b.color);
             
             DrawText(b.text, b.rec.x + 2, b.rec.y, GetScreenWidth() / 56, WHITE);
+            
+            if (i % 8 == 0) {
+                char x[4];
+                sprintf(x, "%d", i);
+                DrawText(x, b.rec.x + 2, b.rec.y + GetScreenHeight() / 40, GetScreenWidth() / 84, LIGHTGRAY);
+            }
 
             if (CheckCollisionPointRec(GetMousePosition(), b.rec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 uint64_t mask = (uint64_t)1 << i;
