@@ -6,35 +6,24 @@
 
 #include <raylib.h>
 
-#define define_array(_name, _type) \
-    typedef struct _name {         \
-        _type *data;               \
-        int64_t index;             \
-        int64_t capacity;          \
-    } _name                        \
-
-#include "buttons.h"
+#include "binnumvis.h"
 
 uint64_t num = 0;
-
-bool raylib_color_equals(Color c1, Color c2) {
-    return (c1.r == c2.r && c1.g == c2.g && c1.b == c2.b && c1.a == c2.a);
-}
 
 int main(int argc, char **argv) {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(GetScreenWidth(), GetScreenHeight(), "BINNUMVIS");
     SetExitKey(KEY_Q);
-
+    
     Buttons buttons = (Buttons){
         calloc(64, sizeof(Button)),
         63,
         64
     };
 
-    for (int i = 0; i < 64; i++) {
+    for (int i = 0; i < num_bits; i++) {
         buttons.data[i] = (Button){
-            { 16 + i * (GetScreenWidth() / 64), GetScreenHeight() / 10, GetScreenWidth() / 100, GetScreenHeight() / 38 },
+            { 16 + i * (GetScreenWidth() / button_x_divide), GetScreenHeight() / button_y_divide, GetScreenWidth() / button_height_divide, GetScreenHeight() / button_width_divide },
             "0",
             RED,
             i
@@ -44,12 +33,12 @@ int main(int argc, char **argv) {
     char num_text[24];
 
     while (!WindowShouldClose()) {
-        for (int i = 0; i < 64; i++) {
+        for (int i = 0; i < num_bits; i++) {
             buttons.data[i].rec = (Rectangle){
-                16 + i * (GetScreenWidth() / 64),
-                GetScreenHeight() / 10,
-                GetScreenWidth() / 100,
-                GetScreenHeight() / 38
+                16 + i * (GetScreenWidth() / button_x_divide),
+                GetScreenHeight() / button_y_divide,
+                GetScreenWidth() / button_height_divide,
+                GetScreenHeight() / button_width_divide
             };
         }
 
@@ -57,11 +46,11 @@ int main(int argc, char **argv) {
         ClearBackground(DARKGRAY);
         DrawFPS(10, 10);
         
-        sprintf(num_text, "%llu", num);
+        sprintf(num_text, signed_print, num);
         DrawText("i64:", GetScreenWidth() / 40, GetScreenHeight() / 5, GetScreenWidth() / 40, LIGHTGRAY);
         DrawText(num_text, GetScreenWidth() / 40, GetScreenHeight() / 4, GetScreenWidth() / 40, WHITE);
 
-        sprintf(num_text, "%ld", num);
+        sprintf(num_text, unsigned_print, num);
         DrawText("u64:", GetScreenWidth() / 2, GetScreenHeight() / 5, GetScreenWidth() / 40, LIGHTGRAY);
         DrawText(num_text, GetScreenWidth() / 2, GetScreenHeight() / 4, GetScreenWidth() / 40, WHITE);
 
@@ -69,16 +58,16 @@ int main(int argc, char **argv) {
         DrawText("hex:", GetScreenWidth() / 40, GetScreenHeight() / 3, GetScreenWidth() / 40, LIGHTGRAY);
         DrawText(num_text, GetScreenWidth() / 40, GetScreenHeight() / 2.5, GetScreenWidth() / 40, WHITE);
 
-        for (int i = 0; i < 64; i++) {
+        for (int i = 0; i < num_bits; i++) {
             Button b = buttons.data[i];
             DrawRectangleRounded(b.rec, 0.5, 3, b.color);
             
-            DrawText(b.text, b.rec.x + 2, b.rec.y, GetScreenWidth() / 56, WHITE);
+            DrawText(b.text, b.rec.x + bit_text_offset, b.rec.y, GetScreenWidth() / bit_text_width_divide, WHITE);
             
             if (i % 8 == 0) {
                 char x[4];
                 sprintf(x, "%d", i);
-                DrawText(x, b.rec.x + 2, b.rec.y + GetScreenHeight() / 40, GetScreenWidth() / 84, LIGHTGRAY);
+                DrawText(x, b.rec.x + bit_text_offset, b.rec.y + GetScreenHeight() / text_height_divide, GetScreenWidth() / text_width_divide, LIGHTGRAY);
             }
 
             if (CheckCollisionPointRec(GetMousePosition(), b.rec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
