@@ -9,6 +9,7 @@
 #include "binnumvis.h"
 
 int main(int argc, char **argv) {
+    SetTraceLogLevel(LOG_ERROR);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(GetScreenWidth(), GetScreenHeight(), "BINNUMVIS");
     SetExitKey(KEY_Q);
@@ -24,7 +25,9 @@ int main(int argc, char **argv) {
         DrawFPS(10, 10);
     
         draw_bit_selection_buttons();
-
+    
+        update_input();
+        
         for (int i = 0; i < num_bits; i++) {
             update_button(i);
         }

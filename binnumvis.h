@@ -232,3 +232,68 @@ void update_button(int i) {
         }
     }
 }
+
+bool text_input_active = false;
+char input_text[24];
+int i = 0;
+
+void update_input(void) {
+    DrawText("input:", GetScreenWidth() / 2, GetScreenHeight() / 3, GetScreenWidth() / 40, LIGHTGRAY);
+    Rectangle input_background = {GetScreenWidth() / 2, GetScreenHeight() / 2.5, GetScreenWidth() / 3, GetScreenHeight() / 20};
+    DrawRectangleRec(input_background, WHITE);
+
+    if (CheckCollisionPointRec(GetMousePosition(), input_background) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        text_input_active = true;
+    } else if (!CheckCollisionPointRec(GetMousePosition(), input_background) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        text_input_active = false;
+    }
+
+    if (text_input_active) {
+        int c = GetCharPressed();
+        while (c > 0) {
+            if (i < 23) {
+                input_text[i] = c;
+                input_text[i + 1] = 0;
+                i++;
+            }
+            c = GetCharPressed();
+        }
+
+        if (IsKeyPressed(KEY_BACKSPACE)) {
+            i--;
+            if (i < 0) i = 0;
+            input_text[i] = 0;
+        }
+    }
+
+    DrawText(input_text, input_background.x + GetScreenWidth()/200, input_background.y, GetScreenHeight()/25, PINK);
+
+    Rectangle input_button = {GetScreenWidth() / 1.175, GetScreenHeight() / 2.5, GetScreenWidth() / 12, GetScreenHeight() / 20};
+    DrawRectangleRec(input_button, LIGHTGRAY);
+    DrawText("INPUT", input_button.x + GetScreenWidth()/200, input_button.y + GetScreenHeight()/100, GetScreenHeight()/25, WHITE);
+
+    if (CheckCollisionPointRec(GetMousePosition(), input_button) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        text_input_active = true;
+        num = atoll(input_text);
+        memset(input_text, 0, sizeof(input_text));
+        i = 0;
+
+        for (int i = 0; i < num_bits; i++) {
+            if ((num >> i) & 1) {
+                bit_buttons.data[i] = (Button){
+                    { 16 + i * (GetScreenWidth() / button_x_divide), GetScreenHeight() / button_y_divide, GetScreenWidth() / button_height_divide, GetScreenHeight() / button_width_divide },
+                    "1",
+                    GREEN,
+                    i
+                };
+            } else {
+                bit_buttons.data[i] = (Button){
+                    { 16 + i * (GetScreenWidth() / button_x_divide), GetScreenHeight() / button_y_divide, GetScreenWidth() / button_height_divide, GetScreenHeight() / button_width_divide },
+                    "0",
+                    RED,
+                    i
+                };
+            }
+        }
+    }
+}
