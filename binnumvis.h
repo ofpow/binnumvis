@@ -211,6 +211,8 @@ bool pressed_last_frame = false;
 Vector2 start_pos = {0};
 Vector2 end_pos = {0};
 
+#define ABS(_x) ((_x) < 0 ? -(_x) : (_x))
+
 void update_bit_button(int i) {
     Button b = bit_buttons.data[i];
     DrawRectangleRounded(b.rec, 0.5, 3, b.color);
@@ -334,8 +336,6 @@ Button toggle_bit_button(Button b) {
     }
 }
 
-#define ABS(_x) ((_x) < 0 ? -(_x) : (_x))
-
 void update_drag_toggle(void) {
     if (end_pos.x != 0 || end_pos.y != 0) {
         float temp = 0;
@@ -363,5 +363,30 @@ void update_drag_toggle(void) {
             }
         }
         end_pos = (Vector2){0, 0};
+    }
+
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        float temp = 0;
+        float startx = start_pos.x;
+        float starty = start_pos.y;
+        float endx = GetMousePosition().x;
+        float endy = GetMousePosition().y;
+        if (endx < startx) {
+            temp = endx;
+            endx = startx;
+            startx = temp;
+        }
+        if (starty > endy) {
+            temp = endy;
+            endy = starty;
+            starty = temp;
+        }
+        Rectangle r = {
+            startx,
+            starty,
+            ABS(startx - endx),
+            ABS(endy - starty),
+        };
+        DrawRectangleRec(r, (Color){200, 200, 200, 100});
     }
 }
