@@ -207,6 +207,10 @@ void draw_bit_selection_buttons(void) {
     DrawText(num_text, GetScreenWidth() / 40, GetScreenHeight() / 2.5, GetScreenWidth() / 40, WHITE);
 }
 
+bool pressed_last_frame = false;
+Vector2 start_pos = {0};
+Vector2 end_pos = {0};
+
 void update_bit_button(int i) {
     Button b = bit_buttons.data[i];
     DrawRectangleRounded(b.rec, 0.5, 3, b.color);
@@ -219,7 +223,9 @@ void update_bit_button(int i) {
         DrawText(x, b.rec.x + bit_text_offset, b.rec.y + GetScreenHeight() / text_height_divide, GetScreenWidth() / text_width_divide, LIGHTGRAY);
     }
 
-    if (CheckCollisionPointRec(GetMousePosition(), b.rec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+    if (CheckCollisionPointRec(GetMousePosition(), b.rec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !pressed_last_frame) {
+        pressed_last_frame = true;
+        start_pos = GetMousePosition();
         uint64_t mask = (uint64_t)1 << i;
         if (raylib_color_equals(b.color, RED)) {
             num |= mask;
@@ -230,6 +236,15 @@ void update_bit_button(int i) {
             bit_buttons.data[i].color = RED;
             bit_buttons.data[i].text = "0";
         }
+    }
+
+    if (pressed_last_frame && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+        end_pos = GetMousePosition();
+        pressed_last_frame = false;
+        if (start_pos.x != end_pos.x || start_pos.y != end_pos.y) {
+            return;
+        }
+        end_pos = (Vector2){0, 0};
     }
 }
 
@@ -298,5 +313,55 @@ void update_input(void) {
                 };
             }
         }
+    }
+}
+
+Button toggle_bit_button(Button b) {
+    if (raylib_color_equals(b.color, RED)) {
+        return (Button) {
+            b.rec,
+            "1",
+            GREEN,
+            b.index,
+        };
+    } else {
+        return (Button) {
+            b.rec,
+            "0",
+            RED,
+            b.index,
+        };
+    }
+}
+
+#define ABS(_x) ((_x) < 0 ? -(_x) : (_x))
+
+void update_drag_toggle(void) {
+    if (end_pos.x != 0 || end_pos.y != 0) {
+        float temp = 0;
+        if (end_pos.x < start_pos.x) {
+            temp = end_pos.x;
+            end_pos.x = start_pos.x;
+            start_pos.x = temp;
+        }
+        if (start_pos.y > end_pos.y) {
+            temp = end_pos.y;
+            end_pos.y = start_pos.y;
+            start_pos.y = temp;
+        }
+
+        for (int i = 0; i < num_bits; i++) {
+            Rectangle r = bit_buttons.data[i].rec;
+            if (start_pos.x < r.x && r.x <= end_pos.x) {
+                uint64_t mask = (uint64_t)1 << i;
+                if (raylib_color_equals(bit_buttons.data[i].color, RED)) {
+                    num |= mask;
+                } else {
+                    num &= ~mask;
+                }
+                bit_buttons.data[i] = toggle_bit_button(bit_buttons.data[i]);
+            }
+        }
+        end_pos = (Vector2){0, 0};
     }
 }

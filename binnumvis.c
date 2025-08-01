@@ -31,6 +31,8 @@ int main(int argc, char **argv) {
         for (int i = 0; i < num_bits; i++) {
             update_bit_button(i);
         }
+        
+        update_drag_toggle();
 
         EndDrawing();
     }
