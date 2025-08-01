@@ -263,7 +263,10 @@ void update_input(void) {
             i--;
             if (i < 0) i = 0;
             input_text[i] = 0;
-        }
+        } 
+        DrawRectangleLinesEx(input_background, 10, LIGHTGRAY);
+    } else {
+        DrawRectangleRec(input_background, WHITE);
     }
 
     DrawText(input_text, input_background.x + GetScreenWidth()/200, input_background.y, GetScreenHeight()/25, PINK);
@@ -273,7 +276,7 @@ void update_input(void) {
     DrawText("INPUT", input_button.x + GetScreenWidth()/200, input_button.y + GetScreenHeight()/100, GetScreenHeight()/25, WHITE);
 
     if (CheckCollisionPointRec(GetMousePosition(), input_button) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        text_input_active = true;
+        text_input_active = false;
         num = atoll(input_text);
         memset(input_text, 0, sizeof(input_text));
         i = 0;
