@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
         update_input();
         
         for (int i = 0; i < num_bits; i++) {
-            update_button(i);
+            update_bit_button(i);
         }
 
         EndDrawing();

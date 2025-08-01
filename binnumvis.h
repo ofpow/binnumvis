@@ -207,7 +207,7 @@ void draw_bit_selection_buttons(void) {
     DrawText(num_text, GetScreenWidth() / 40, GetScreenHeight() / 2.5, GetScreenWidth() / 40, WHITE);
 }
 
-void update_button(int i) {
+void update_bit_button(int i) {
     Button b = bit_buttons.data[i];
     DrawRectangleRounded(b.rec, 0.5, 3, b.color);
     
