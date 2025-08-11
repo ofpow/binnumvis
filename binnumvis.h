@@ -179,17 +179,17 @@ void draw_bit_selection_buttons(void) {
     float xoffset = GetScreenWidth() / 60;
     float yoffset = GetScreenHeight() / 65;
     DrawRectangleRounded(bit_selection_buttons.data[0].rec, 0.5, 3, LIGHTGRAY);
-    DrawText("8 bit", bit_selection_buttons.data[0].rec.x + xoffset, bit_selection_buttons.data[0].rec.y + yoffset, 50, WHITE);
+    DrawText("8 bit", bit_selection_buttons.data[0].rec.x + xoffset, bit_selection_buttons.data[0].rec.y + yoffset, GetScreenWidth() / 65, WHITE);
     if (CheckCollisionPointRec(GetMousePosition(), bit_selection_buttons.data[0].rec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         set_8_bit_settings();
     }
     DrawRectangleRounded(bit_selection_buttons.data[1].rec, 0.5, 3, LIGHTGRAY);
-    DrawText("32 bit", bit_selection_buttons.data[1].rec.x + xoffset, bit_selection_buttons.data[1].rec.y + yoffset, 50, WHITE);
+    DrawText("32 bit", bit_selection_buttons.data[1].rec.x + xoffset, bit_selection_buttons.data[1].rec.y + yoffset, GetScreenWidth() / 65, WHITE);
     if (CheckCollisionPointRec(GetMousePosition(), bit_selection_buttons.data[1].rec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         set_32_bit_settings();
     }
     DrawRectangleRounded(bit_selection_buttons.data[2].rec, 0.5, 3, LIGHTGRAY);
-    DrawText("64 bit", bit_selection_buttons.data[2].rec.x + xoffset, bit_selection_buttons.data[2].rec.y + yoffset, 50, WHITE);
+    DrawText("64 bit", bit_selection_buttons.data[2].rec.x + xoffset, bit_selection_buttons.data[2].rec.y + yoffset, GetScreenWidth() / 65, WHITE);
     if (CheckCollisionPointRec(GetMousePosition(), bit_selection_buttons.data[2].rec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         set_64_bit_settings();
     }
