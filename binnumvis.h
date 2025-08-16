@@ -292,7 +292,8 @@ void update_input(void) {
     DrawRectangleRec(input_button, LIGHTGRAY);
     DrawText("INPUT", input_button.x + GetScreenWidth()/200, input_button.y + GetScreenHeight()/100, GetScreenHeight()/25, WHITE);
 
-    if (CheckCollisionPointRec(GetMousePosition(), input_button) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+    if ((CheckCollisionPointRec(GetMousePosition(), input_button) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) ||
+            (text_input_active == true && IsKeyReleased(KEY_ENTER))) {
         text_input_active = false;
         num = atoll(input_text);
         memset(input_text, 0, sizeof(input_text));
