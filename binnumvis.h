@@ -338,6 +338,7 @@ Button toggle_bit_button(Button b) {
 }
 
 void update_drag_toggle(void) {
+    if (start_pos.x == 0 && start_pos.y == 0) return;
     if (end_pos.x != 0 || end_pos.y != 0) {
         float temp = 0;
         if (end_pos.x < start_pos.x) {
