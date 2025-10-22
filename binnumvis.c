@@ -10,7 +10,7 @@
 
 int main(int argc, char **argv) {
     SetTraceLogLevel(LOG_ERROR);
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
     InitWindow(GetScreenWidth(), GetScreenHeight(), "BINNUMVIS");
     SetExitKey(KEY_Q);
     
